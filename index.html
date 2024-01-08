@@ -32,7 +32,7 @@
 
 <script>
   const msg = new SpeechSynthesisUtterance();
-  let voices = [];
+  // let voices = []; // commented out to work on Firefox
   const voicesDropdown = document.querySelector('[name="voice"]');
   const options = document.querySelectorAll('[type="range"], [name="text"]');
   const speakButton = document.querySelector('#speak');
@@ -67,7 +67,15 @@
     toggle();
   }
 
+  // ---- Added this to work on Firefox -----
+  if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = populateVoices;
+  }
+  speechSynthesis.onvoiceschanged()
+  // --------------------------------
+
   speechSynthesis.addEventListener('voiceschanged', populateVoices);
+
   voicesDropdown.addEventListener('change', setVoice);
   options.forEach(option => option.addEventListener('change', setOption));
   speakButton.addEventListener('click', toggle);
